@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Files</string>
+    <string name="title_activity_list_local_files">ListLocalFiles</string>
+</resources>
