@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,25 +17,14 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.ResourceFinder;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
-import org.luaj.vm2.lib.jse.JsePlatform;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Comparator;
 
 
-public class MainActivity extends AppCompatActivity implements ResourceFinder {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "FS";
-
-    private Globals globals;
-    private LuaValue setLight;
-    private LuaValue onOccSensorChange;
 
     private Receiver receiver;
 
@@ -52,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         receiver = new Receiver();
+
+        setTitle("Address pending...");
+        new GetAddressTask().execute();
     }
 
     @Override
@@ -113,7 +106,10 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         editor.putString("address", urlText.getText().toString());
         editor.commit();
 
-        // hide the keyboard
+        hideKeyboard(view);
+    }
+
+    private void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
@@ -159,48 +155,23 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         }
     }
 
-    public void executeClick(View view) {
-        Log.v(TAG, "executeClick");
-
-        globals = JsePlatform.standardGlobals();
-        globals.finder = this;
-
-        LuaValue init = globals.loadfile("init.lua");
-        init.call();
-
-//        LuaValue fun1 = globals.get("fun1");
-//        fun1.call(LuaValue.valueOf("This is a test\n"), LuaValue.valueOf(42));
-//
-        EditText console = (EditText)findViewById(R.id.console);
-
-        LuaValue setConsole = globals.get("setConsole");
-        setConsole.call(CoerceJavaToLua.coerce(console));
-
-        onOccSensorChange = globals.get("onOccSensorChange");
-        onOccSensorChange.call(LuaValue.valueOf(0));
-        onOccSensorChange.call(LuaValue.valueOf(100));
-
-        setLight = globals.get("setLight");
-    }
-
-    public void lightClick(View view) {
-        Log.v(TAG, "lightClick");
-        if (setLight != null) {
-            EditText console = (EditText)findViewById(R.id.console);
-
-            setLight.call(CoerceJavaToLua.coerce(console));
-        }
-    }
-
-    // Implement a finder that loads from the assets directory.
-    public InputStream findResource(String name) {
-        try {
-            Log.v(TAG, "findResource: " + name);
-            return(new FileInputStream(new File(getFilesDir(), name)));
-
-            //return getAssets().open(name);
-        } catch (java.io.IOException ioe) {
+    public class GetAddressTask extends AsyncTask<Void, Void, InetAddress> {
+        @Override
+        protected InetAddress doInBackground(Void... params) {
+            try {
+                InetAddress ownIP = InetAddress.getLocalHost();
+                System.out.println("IP of my Android := "+ownIP.getHostAddress());
+                return ownIP;
+            }catch (Exception e){
+                System.out.println("Exception caught ="+e.getMessage());
+                String t =  e.getMessage() + "yes";
+            }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(InetAddress result) {
+            setTitle(result.getHostAddress());
         }
     }
 

@@ -19,6 +19,8 @@ import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static android.R.attr.data;
+
 public class FilesService extends Service {
     public static final String CONTENT_ACTION = "com.kgdsoftware.files.CONTENT";
 
@@ -105,10 +107,10 @@ public class FilesService extends Service {
                 InputStream is = conn.getInputStream();
                 BufferedInputStream bis = new BufferedInputStream(is);
                 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                //We create an array of bytes
-                byte[] data = new byte[1024];
                 int current = 0;
 
+                // Slurp the data in, 1K bytes at a time.
+                byte[] data = new byte[1024];
                 while((current = bis.read(data,0,data.length)) != -1) {
                     buffer.write(data, 0, current);
                 }
