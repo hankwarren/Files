@@ -8,11 +8,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.nanohttpd.protocols.http.IHTTPSession;
-import org.nanohttpd.protocols.http.NanoHTTPD;
-import org.nanohttpd.protocols.http.request.Method;
-import org.nanohttpd.protocols.http.response.Response;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,6 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import fi.iki.elonen.NanoHTTPD;
 
 
 public class ServerService extends Service {
@@ -174,7 +171,7 @@ public class ServerService extends Service {
                 sb.append("GET lost");
             }
 
-            return Response.newFixedLengthResponse(sb.toString());
+            return NanoHTTPD.newFixedLengthResponse(sb.toString());
         }
 
         private void copyFile(InputStream in, OutputStream out) throws IOException {

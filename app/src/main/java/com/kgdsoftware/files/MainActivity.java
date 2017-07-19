@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,8 +15,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
@@ -26,28 +22,21 @@ import org.luaj.vm2.lib.ResourceFinder;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.security.Security;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import static android.support.v4.content.LocalBroadcastManager.getInstance;
 
 public class MainActivity extends AppCompatActivity implements ResourceFinder {
     private static final String TAG = "FS";
 
-    Globals globals;
-    LuaValue setLight;
-    LuaValue onOccSensorChange;
+    private Globals globals;
+    private LuaValue setLight;
+    private LuaValue onOccSensorChange;
 
-    Receiver receiver;
-
-//    static {
-//        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
-//    }
+    private Receiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
             case R.id.list_local_files:
                 stringBuilder = new StringBuilder();
                 for (File file : getFilesDir().listFiles()) {
-                    stringBuilder.append(file.getName() + "\n");
+                    stringBuilder.append(file.getName());
+                    stringBuilder.append("\n");
                 }
                 EditText console = (EditText)findViewById(R.id.console);
                 console.setText(stringBuilder.toString());
