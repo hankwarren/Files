@@ -19,8 +19,12 @@ import android.widget.EditText;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -155,23 +159,54 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class GetAddressTask extends AsyncTask<Void, Void, InetAddress> {
+    public class GetAddressTask extends AsyncTask<Void, Void, String> {
         @Override
-        protected InetAddress doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
-                InetAddress ownIP = InetAddress.getLocalHost();
-                System.out.println("IP of my Android := "+ownIP.getHostAddress());
-                return ownIP;
-            }catch (Exception e){
+                List<String> possibleAddresses = new ArrayList<>();
+                Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+                while (networkInterfaces.hasMoreElements()) {
+                    NetworkInterface networkInterface = networkInterfaces.nextElement();
+
+                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        String address = inetAddress.getHostAddress();
+
+                        // This test seems rather ad hoc. Looking at the addresses there appears
+                        //  to be some sort of paramter substition using the percent to mark the
+                        //  field or fields. Since that is not very useful for what I am doing (at
+                        //  least I don't current think it is), exclude it.
+                        // There might be other criteria for exclusion. Stay tuned.
+                        if (!address.contains("%")) {
+                            possibleAddresses.add(address);
+                        }
+                        Log.v(TAG, "Address: " + address);
+                    }
+                }
+
+                // Now pick an address. Exclude the not useful ones.
+                //  In short, pick the first address that is not localhost.
+                String usefulAddress = null;
+                for (String address : possibleAddresses) {
+                    if (!address.equals("127.0.0.1")) {
+                        return address;
+                    }
+                }
+
+                // We really should not get here, but who knows.
+                return "No address found?";
+
+            } catch (Exception e){
                 System.out.println("Exception caught ="+e.getMessage());
                 String t =  e.getMessage() + "yes";
             }
-            return null;
+            return "Task ended with no result";
         }
 
         @Override
-        protected void onPostExecute(InetAddress result) {
-            setTitle(result.getHostAddress());
+        protected void onPostExecute(String result) {
+            setTitle(result);
         }
     }
 
