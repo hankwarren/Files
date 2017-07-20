@@ -1,10 +1,13 @@
 package com.kgdsoftware.files;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -58,6 +61,7 @@ public class ViewLocalFile extends AppCompatActivity {
             }
             Log.v("AA", sb.toString());
             console.setText(sb.toString());
+            hideKeyboard(console);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -74,6 +78,11 @@ public class ViewLocalFile extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void copyPrivateKey() {
