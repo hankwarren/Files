@@ -127,7 +127,7 @@ public class ServerService extends Service {
             if (method == Method.POST) {
                 try {
                     // Look at the uri to see what to do.
-                    
+
                     session.parseBody(files);
 
                     // I don't like the pattern matching stuff.
