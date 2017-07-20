@@ -31,6 +31,8 @@ import java.util.regex.Pattern;
 
 import fi.iki.elonen.NanoHTTPD;
 
+import static android.R.attr.data;
+import static android.R.attr.mimeType;
 import static com.kgdsoftware.files.LuaService.copyFile;
 import static java.lang.System.in;
 
@@ -183,11 +185,11 @@ public class ServerService extends Service {
 
             } else if (method == Method.GET) {
                 if (uri.equals("/")) {
-                   uri = "/www/index.html";
+                   uri = "/index.html";
                 }
                 FileReader index = null;
                 try {
-                    index = new FileReader(getFilesDir() + uri);
+                    index = new FileReader(getFilesDir() + "/www" + uri);
                     BufferedReader reader = new BufferedReader(index);
                     String line = "";
                     while ((line = reader.readLine()) != null) {
@@ -200,8 +202,11 @@ public class ServerService extends Service {
                 }
 
             }
-
-            return NanoHTTPD.newFixedLengthResponse(sb.toString());
+            String mimeType = "text/html";
+            if (uri.contains("css")) {
+                mimeType = "text/css";
+            }
+            return newFixedLengthResponse(Response.Status.OK, mimeType, sb.toString());
         }
 
         private void copyFile(InputStream in, OutputStream out) throws IOException {
