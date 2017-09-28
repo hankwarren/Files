@@ -12,6 +12,8 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.ResourceFinder;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
+import org.luaj.vm2.lib.jse.Helper;
+import org.luaj.vm2.Varargs;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,9 +55,18 @@ public class LuaService extends Service implements ResourceFinder {
         super.onStartCommand(intent, flags, startId);
         Log.v(TAG, "LuaService onStartCommand:");
 
-        worker = new Worker();
-        executor.execute(worker);
-        running = true;
+        boolean start = intent.getBooleanExtra("start", false);
+        if(start) {
+            String script = intent.getStringExtra("script");
+            worker = new Worker(script);
+            executor.execute(worker);
+            running = true;
+        } else {
+            if (worker != null) {
+                worker.stop();
+            }
+            running = false;
+        }
 
         return START_STICKY;
     }
@@ -67,46 +78,50 @@ public class LuaService extends Service implements ResourceFinder {
     }
 
     public class Worker implements Runnable {
-        LuaValue stop;
-        LuaValue main;
-        LuaValue runLumaScript;
+        private LuaValue stop;
+        private LuaValue main;
+        private LuaValue runLumaScript;
+        private String script;
+
+        public Worker(String script) {
+            this.script = script;
+        }
 
         @Override
         public void run() {
-
             try {
                 Globals globals = JsePlatform.standardGlobals();
+                LuaBridge bridge = new LuaBridge();
                 globals.finder = LuaService.this;
 
-                File apiFile = new File(getFilesDir(), "levitonAPI.lua");
-                File file = new File(getFilesDir(), "main.lua");
-                if (apiFile.exists() && file.exists()) {
-                    Log.v(TAG, "main.lua exists +++++++++++++++++++++++++");
+                File file = new File(getFilesDir(), script);
+                Log.v(TAG, "script file: " + script);
+                Log.v(TAG, "script file: " + file.getName() + ": " + file.getCanonicalFile());
+                if (file.exists()) {
+                    Log.v(TAG, script + " exists +++++++++++++++++++++++++");
 
-                    LuaValue script = globals.loadfile("main.lua");
-                    Log.v(TAG, "script: " + script);
-                    script.call();
+                    LuaValue luaScript = globals.loadfile(script);
+                    Log.v(TAG, "script: " + luaScript);
+                    luaScript.call();
+
                     // now get the Main entry point and call it.
                     main = globals.get("Main");
                     stop = globals.get("stop");
 
                     // If there is no stop, the script must not start.
-                    if (stop.isnil()) throw new Exception("main.lua has no stop.");
+                    if (stop.isnil()) throw new Exception(script + " has no stop.");
 
                     Log.v(TAG, "main: " + main + "  stop: " + stop);
                     // Is there anything else to do before starting? Do it here.
                     // Somewhere we need to get the event lists. I think there are 2 inputList and channelList.
                     // These (Lua) tables have the registered event handlers for 'input' and 'channel'
 
-                    runLumaScript = globals.get("runLumaScript");
-                    Log.v(TAG, "runLumaScript: " + runLumaScript.toString());
 
                     // Now start this mess...
-
                     main.call();
                     Log.v(TAG, "Worker Main returned");
                 } else {
-                    Log.v(TAG, "main.lua does not exist +++++++++++++++++++++++++++++++");
+                    Log.v(TAG, script + " does not exist +++++++++++++++++++++++++++++++");
                 }
                 main = null;
                 stop = null;
@@ -185,5 +200,18 @@ public class LuaService extends Service implements ResourceFinder {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
+    public class LuaBridge {
+        public Varargs getClass(String clazzName) {
+            try {
+                Class clazz = Class.forName(clazzName);
+                return Helper.forClass(clazz);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }

@@ -159,6 +159,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void luaClick(View view) {
+        Log.v(TAG, "luaClick");
+        startActivity(new Intent(this, LuaFiles.class));
+    }
+
+
     public class GetAddressTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {

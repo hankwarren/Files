@@ -81,22 +81,12 @@
         android:textSize="18sp" />
 
     <Button
-        android:text="Light"
+        android:id="@+id/lua_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/get_file_button"
-        android:layout_marginStart="11dp"
-        android:id="@+id/button6"
-        android:layout_toStartOf="@+id/button"
-        android:onClick="lightClick" />
+        android:layout_toEndOf="@+id/button2"
+        android:onClick="luaClick"
+        android:text="Lua Scripts" />
 
-    <Button
-        android:text="execute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button5"
-        android:onClick="executeClick"
-        android:layout_alignBaseline="@+id/button6"
-        android:layout_alignBottom="@+id/button6"
-        android:layout_toEndOf="@+id/button2" />
 </RelativeLayout>
