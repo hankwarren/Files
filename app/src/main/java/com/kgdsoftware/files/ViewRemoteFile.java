@@ -59,7 +59,7 @@ public class ViewRemoteFile extends AppCompatActivity {
                 reader.close();
                 Log.v(TAG, "got: " + stringBuilder.toString());
 
-                return(stringBuilder.toString());
+                return (stringBuilder.toString());
 
             } catch (IOException e) {
                 Log.e("Error: ", e.getMessage());
@@ -69,12 +69,12 @@ public class ViewRemoteFile extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            EditText content = (EditText)findViewById(R.id.content);
+            EditText content = (EditText) findViewById(R.id.content);
             Log.v(TAG, "result: " + result);
             content.setText(result);
 
             // hide the keyboard
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(content.getWindowToken(), 0);
         }
     }

@@ -72,7 +72,7 @@ public class ListRemoteFiles extends AppCompatActivity {
         listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String fileName = (String)parent.getItemAtPosition(position);
+                String fileName = (String) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(view.getContext(), ViewRemoteFile.class);
                 SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -88,7 +88,7 @@ public class ListRemoteFiles extends AppCompatActivity {
     }
 
     public void clickGetList(View view) {
-        EditText editText = (EditText)findViewById(R.id.url_text);
+        EditText editText = (EditText) findViewById(R.id.url_text);
 
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -122,7 +122,7 @@ public class ListRemoteFiles extends AppCompatActivity {
                 reader.close();
                 Log.v(TAG, "got: " + stringBuilder.toString());
 
-                return(new JSONArray(stringBuilder.toString()));
+                return (new JSONArray(stringBuilder.toString()));
 
             } catch (IOException e) {
                 Log.e("Error: ", e.getMessage());
@@ -134,7 +134,7 @@ public class ListRemoteFiles extends AppCompatActivity {
         }
 
         protected void onPostExecute(JSONArray result) {
-            ListView listView = (ListView)findViewById(R.id.file_list);
+            ListView listView = (ListView) findViewById(R.id.file_list);
             JSONArrayAdapter adapter = new JSONArrayAdapter(result);
             listView.setAdapter(adapter);
         }
@@ -142,6 +142,7 @@ public class ListRemoteFiles extends AppCompatActivity {
 
     public class JSONArrayAdapter extends BaseAdapter {
         private JSONArray jsonArray;
+
         public JSONArrayAdapter(JSONArray array) {
             jsonArray = array;
         }

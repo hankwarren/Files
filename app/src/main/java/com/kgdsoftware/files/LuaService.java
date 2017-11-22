@@ -21,12 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
-import static java.lang.System.getProperty;
 
 public class LuaService extends Service implements ResourceFinder {
     public static String TAG = "LS";
@@ -56,7 +53,7 @@ public class LuaService extends Service implements ResourceFinder {
         Log.v(TAG, "LuaService onStartCommand:");
 
         boolean start = intent.getBooleanExtra("start", false);
-        if(start) {
+        if (start) {
             String script = intent.getStringExtra("script");
             worker = new Worker(script);
             executor.execute(worker);
@@ -80,10 +77,9 @@ public class LuaService extends Service implements ResourceFinder {
     public class Worker implements Runnable {
         private LuaValue stop;
         private LuaValue main;
-        private LuaValue runLumaScript;
         private String script;
 
-        public Worker(String script) {
+        Worker(String script) {
             this.script = script;
         }
 
@@ -146,11 +142,6 @@ public class LuaService extends Service implements ResourceFinder {
             } catch (Exception e) {
                 Log.v(TAG, "Call to stop failed: " + e.getMessage());
             }
-        }
-
-        public void halt() {
-            // I could not get this to work.
-            runLumaScript = CoerceJavaToLua.coerce(false);
         }
     }
 

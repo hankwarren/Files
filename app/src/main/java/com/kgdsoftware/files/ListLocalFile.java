@@ -24,7 +24,7 @@ public class ListLocalFile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListView listView = (ListView)findViewById(R.id.file_list);
+        ListView listView = (ListView) findViewById(R.id.file_list);
         File[] fileList = getFilesDir().listFiles();
 
         FileArrayAdapter fileArrayAdapter = new FileArrayAdapter(this, R.layout.file_list_row, fileList);
@@ -33,7 +33,7 @@ public class ListLocalFile extends AppCompatActivity {
         listView.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File file = (File)parent.getItemAtPosition(position);
+                File file = (File) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(view.getContext(), ViewLocalFile.class);
                 intent.putExtra("filename", file.getName());

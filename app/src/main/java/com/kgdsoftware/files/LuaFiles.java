@@ -29,7 +29,7 @@ public class LuaFiles extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner luaSpinner = (Spinner)findViewById(R.id.lua_spinner);
+        Spinner luaSpinner = (Spinner) findViewById(R.id.lua_spinner);
         File[] fileList = getFilesDir().listFiles();
 
         FileArrayAdapter adapter = new FileArrayAdapter(this, R.layout.file_list_row, fileList);
@@ -40,8 +40,8 @@ public class LuaFiles extends AppCompatActivity {
     }
 
     public void startLuaScriptClick(View view) {
-        Spinner spinner = (Spinner)findViewById(R.id.lua_spinner);
-        File file = (File)spinner.getSelectedItem();
+        Spinner spinner = (Spinner) findViewById(R.id.lua_spinner);
+        File file = (File) spinner.getSelectedItem();
         String script = file.getName();
 
         Log.v(TAG, "startLuaScript: " + script);

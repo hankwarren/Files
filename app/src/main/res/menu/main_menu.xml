@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/list_local_files"
+    <item
+        android:id="@+id/list_local_files"
         android:title="List Local Files" />
-    <item android:id="@+id/list_remote_files"
+    <item
+        android:id="@+id/list_remote_files"
         android:title="List Remote Files" />
-    <item android:id="@+id/view_local_file"
+    <item
+        android:id="@+id/view_local_file"
         android:title="View Local File" />
+    <item
+        android:id="@+id/view_coap_device"
+        android:title="View Coap Device" />
 </menu>

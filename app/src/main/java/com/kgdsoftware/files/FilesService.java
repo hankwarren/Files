@@ -32,10 +32,10 @@ public class FilesService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         displayNotificationMessage("Files Service running");
 
-        if(executor == null) {
+        if (executor == null) {
             executor = Executors.newSingleThreadExecutor();
         } else {
             Log.v(TAG, "FilesService: executor already exists. This should not be.");
@@ -72,7 +72,7 @@ public class FilesService extends Service {
     @Override
     public void onDestroy() {
         notificationManager.cancelAll();
-        if(executor != null) executor.shutdownNow();
+        if (executor != null) executor.shutdownNow();
         super.onDestroy();
     }
 
@@ -111,11 +111,11 @@ public class FilesService extends Service {
 
                 // Slurp the data in, 1K bytes at a time.
                 byte[] data = new byte[1024];
-                while((current = bis.read(data,0,data.length)) != -1) {
+                while ((current = bis.read(data, 0, data.length)) != -1) {
                     buffer.write(data, 0, current);
                 }
 
-                String filename = urlString.substring(urlString.lastIndexOf("/")+1);
+                String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
 
                 File file = new File(getFilesDir(), filename);
                 FileOutputStream fos = new FileOutputStream(file);
@@ -126,7 +126,7 @@ public class FilesService extends Service {
                 intent.setAction(FilesService.CONTENT_ACTION);
                 intent.putExtra("content", filename + " added");
                 sendBroadcast(intent);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 

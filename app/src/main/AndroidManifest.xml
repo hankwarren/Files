@@ -50,7 +50,13 @@
         <activity
             android:name=".LuaFiles"
             android:label="@string/title_activity_lua_files"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".CoapService"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>

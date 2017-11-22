@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         String fileAddress = preferences.getString("address", "http://192.168.1.106:8080/README.txt");
-        EditText urlText = (EditText)findViewById(R.id.url_text);
+        EditText urlText = (EditText) findViewById(R.id.url_text);
 
         urlText.setText(fileAddress);
 
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     stringBuilder.append(file.getName());
                     stringBuilder.append("\n");
                 }
-                EditText console = (EditText)findViewById(R.id.console);
+                EditText console = (EditText) findViewById(R.id.console);
                 console.setText(stringBuilder.toString());
                 return true;
 
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.view_local_file:
                 startActivity(new Intent(this, ListLocalFile.class));
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     public void getFileClick(View view) {
         Log.v(TAG, "getFileClick");
 
-        EditText urlText = (EditText)findViewById(R.id.url_text);
+        EditText urlText = (EditText) findViewById(R.id.url_text);
         Intent intent = new Intent(this, FilesService.class);
         intent.putExtra("url", urlText.getText().toString());
         startService(intent);
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void refreshClick(View view) {
         Log.v(TAG, "refreshClick");
-        EditText console = (EditText)findViewById(R.id.console);
+        EditText console = (EditText) findViewById(R.id.console);
         console.setText("");
 
         File[] files = getFilesDir().listFiles();
@@ -203,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
                 // We really should not get here, but who knows.
                 return "No address found?";
 
-            } catch (Exception e){
-                System.out.println("Exception caught ="+e.getMessage());
-                String t =  e.getMessage() + "yes";
+            } catch (Exception e) {
+                System.out.println("Exception caught =" + e.getMessage());
+                String t = e.getMessage() + "yes";
             }
             return "Task ended with no result";
         }
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.v(TAG, "got a message from the service");
 
-            EditText console = (EditText)findViewById(R.id.console);
+            EditText console = (EditText) findViewById(R.id.console);
             console.setText(intent.getStringExtra("content"));
         }
     }

@@ -81,7 +81,7 @@ public class ViewLocalFile extends AppCompatActivity {
     }
 
     private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 

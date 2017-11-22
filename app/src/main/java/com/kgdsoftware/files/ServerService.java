@@ -185,7 +185,7 @@ public class ServerService extends Service {
 
             } else if (method == Method.GET) {
                 if (uri.equals("/")) {
-                   uri = "/index.html";
+                    uri = "/index.html";
                 }
                 FileReader index = null;
                 try {
@@ -240,7 +240,7 @@ public class ServerService extends Service {
         String[] names = assetManager.list(rootDir);
         for (String name : names) {
             String[] subDirs = assetManager.list(rootDir + "/" + name);
-            if (subDirs.length == 0 ) {
+            if (subDirs.length == 0) {
                 // This must be a file
                 InputStream in = assetManager.open(rootDir + "/" + name, 0);
                 File outFile = new File(getFilesDir(), rootDir + "/" + name);
