@@ -6,6 +6,7 @@ import android.os.IBinder;
 
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
+import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 
 public class CoapService extends Service {
@@ -13,8 +14,7 @@ public class CoapService extends Service {
 
     @Override
     public void onCreate() {
-        this.server = new CoapServer();
-        server.add(new ButtonResource());
+        server = new Server();
 
         server.start();
     }
@@ -36,6 +36,14 @@ public class CoapService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+
+    public class Server extends CoapServer {
+        public Server() {
+            add(new ButtonResource());
+        }
+
+    }
+
     class ButtonResource extends CoapResource {
 
         public ButtonResource() {
@@ -45,6 +53,8 @@ public class CoapService extends Service {
 
             // set display name
             getAttributes().setTitle("Button Resource");
+            setObserveType(CoAP.Type.CON);
+            getAttributes().setObservable();
         }
 
         @Override
@@ -58,5 +68,4 @@ public class CoapService extends Service {
 
         }
     }
-
 }
