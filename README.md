@@ -51,9 +51,28 @@ To build luaj:
 
 
 ---------------------------------------------------------------
-
 clone nanohttpd
+    Need some notes on how to use.
+    nanohttpd is used to POST files to the device.
+    it could also be used to GET files from the device.
+
+---------------------------------------------------------------
+To add coap activity, I had to add
 
 to build it: mvn package
+    packagingOptions {
+        exclude 'edl-v10.html'
+        exclude 'epl-v10.html'
+        exclude 'notice.html'
+    }
 
+to the app/build.gradle file in the android{} section. Otherwise the
+build complained about more than one of the above files.
+Californium is included via the dependencies:
+
+    compile 'org.eclipse.californium:californium-core:2.0.0-M4'
+
+in the same build.gradle file.
+
+---------------------------------------------------------------
 

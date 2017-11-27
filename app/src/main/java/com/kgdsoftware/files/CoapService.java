@@ -15,13 +15,13 @@ public class CoapService extends Service {
     public void onCreate() {
         this.server = new CoapServer();
         server.add(new ButtonResource());
+
+        server.start();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        server.start();
-
+        String button = intent.getStringExtra("sensor");
         return START_STICKY;
     }
 

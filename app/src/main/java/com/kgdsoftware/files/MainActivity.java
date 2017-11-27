@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import org.eclipse.californium.core.CoapServer;
+
 import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -29,7 +31,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "FS";
-
     private Receiver receiver;
 
     @Override
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle("Address pending...");
         new GetAddressTask().execute();
+
+        startService(new Intent(this, CoapService.class));
     }
 
     @Override
@@ -165,6 +168,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, LuaFiles.class));
     }
 
+    public void sensor1Click(View view) {
+        Log.v(TAG, "Sensor 1 Click");
+        Intent intent = new Intent(this, CoapService.class);
+        intent.putExtra("sensor", "1");
+        startActivity(intent);
+    }
+
+    public void sensor2Click(View view) {
+        Log.v(TAG, "Sensor 2 Click");
+        Intent intent = new Intent(this, CoapService.class);
+        intent.putExtra("sensor", "2");
+        startActivity(intent);
+    }
 
     public class GetAddressTask extends AsyncTask<Void, Void, String> {
         @Override

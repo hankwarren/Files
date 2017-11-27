@@ -89,4 +89,22 @@
         android:onClick="luaClick"
         android:text="Lua Scripts" />
 
+    <Button
+        android:id="@+id/sensor1_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/get_file_button"
+        android:layout_centerHorizontal="true"
+        android:onClick="sensor1Click"
+        android:text="Sensor 1" />
+
+    <Button
+        android:id="@+id/sensor2_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/get_file_button"
+        android:layout_toStartOf="@+id/button"
+        android:onClick="sensor2Click"
+        android:text="Sensor 2" />
+
 </RelativeLayout>
